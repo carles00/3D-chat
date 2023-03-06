@@ -4,16 +4,16 @@ let World = {
     myUser: null,
     currentRoom: null,
 
-    createUser: function(userName, avatar, scale, position){
+    createUser: function (userName, avatar, scale, position) {
         let newUser = new User(userName, avatar, scale, position);
         this.usersByName[userName] = newUser;
         return newUser;
     },
 
-    addRoom: function(room){
+    addRoom: function (room) {
         this.roomsByName[room.roomName] = room;
-    }
-}
+    },
+};
 
 class User {
     userName;
@@ -32,19 +32,20 @@ class User {
         this.avatarScale = scale;
         this.material = new RD.Material({
             textures: {
-                color: avatar + "/" + avatar + ".png"}
+                color: avatar + "/" + avatar + ".png",
+            },
         });
 
         this.material.register(avatar);
 
         this.character = new RD.SceneNode({
             scaling: scale,
-            mesh: avatar + "/" + avatar +".wbin",
-            material: avatar
+            mesh: avatar + "/" + avatar + ".wbin",
+            material: avatar,
         });
 
         this.parentNode = new RD.SceneNode({
-            position: position
+            position: position,
         });
 
         this.parentNode.addChild(this.character);
@@ -52,9 +53,9 @@ class User {
 
         this.addAnimation("idle");
         this.addAnimation("walking");
-        this.addAnimation('dance');
+        this.addAnimation("dance");
 
-        this.animation = this.animations['idle'];
+        this.animation = "idle";
 
         this.characterSelector = new RD.SceneNode({
             position: [0, 20, 0],
@@ -66,37 +67,48 @@ class User {
         });
 
         this.parentNode.addChild(this.characterSelector);
-
     }
 
     get currentAnimation() {
-        return this.animation;
+        return this.animations[this.animation];
     }
 
-    get sceneNode(){
+    get sceneNode() {
         return this.parentNode;
     }
 
-    get userCharacter(){
+    get userCharacter() {
         return this.character;
     }
 
-    set setAnimation(anim){
-        this.animation = this.animations[anim];
+    set setAnimation(anim) {
+        this.animation = anim;
     }
 
-    set position(pos){
+    set position(pos) {
         this.parentNode.position = new Float32Array(pos);
     }
 
     addAnimation(animation) {
-        this.loadAnimation(animation, `data/${this.avatar}/${animation}.skanim`);
+        this.loadAnimation(
+            animation,
+            `data/${this.avatar}/${animation}.skanim`
+        );
     }
 
     loadAnimation(name, url) {
         var anim = (this.animations[name] = new RD.SkeletalAnimation());
         anim.load(url);
         return anim;
+    }
+
+    toJSON(){
+        return{
+            userName: this.userName,
+            avatar: this.avatar,
+            scale: this.avatarScale,
+            position: this.parentNode.position            
+        }
     }
 }
 
@@ -113,15 +125,18 @@ class Room {
         this.walkarea.addRect([-90, 0, -10], 80, 20);
         this.walkarea.addRect([-110, 0, -30], 40, 50);
 
-        this.roomNode = new RD.SceneNode({ scaling: 40, position: [0, -0.01, 0] });
+        this.roomNode = new RD.SceneNode({
+            scaling: 40,
+            position: [0, -0.01, 0],
+        });
         this.roomNode.loadGLTF("data/room.gltf");
     }
 
-    addUser(userName){
+    addUser(userName) {
         this.users.push(userName);
     }
 
-    get sceneNode(){
+    get sceneNode() {
         return this.roomNode;
     }
 }

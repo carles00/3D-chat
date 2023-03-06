@@ -5,7 +5,7 @@ var View = {
     camera: null,
     gizmo: null,
     bgColor: null,
- 
+
     init: function (context) {
         this.context = context;
 
@@ -35,10 +35,10 @@ var View = {
             gl.canvas.width = document.body.offsetWidth;
             gl.canvas.height = document.body.offsetHeight;
             gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  
+
             let myUser = World.usersByName[World.myUser];
-            let myUserPos = myUser.sceneNode.localToGlobal([0,40,0])
-            
+            let myUserPos = myUser.sceneNode.localToGlobal([0, 40, 0]);
+
             //var campos = girl_pivot.localToGlobal([0,50,0]);
             let camtarget = myUser.sceneNode.localToGlobal([0, 40, 0]);
             let smoothtarget = vec3.lerp(
@@ -76,33 +76,33 @@ var View = {
             //renderer.render( scene, camera, [gizmo] ); //render gizmo on top
         };
 
-        this.context.onupdate = function(dt){
+        this.context.onupdate = function (dt) {
             Controller.update(dt);
-        }
+        };
 
         this.context.onmouse = (e) => {
             //gizmo.onMouse(e);
         };
 
-        this.context.onmouseup = function(e){
+        this.context.onmouseup = function (e) {
             Controller.mouseClick(e);
-        }
+        };
 
-        this.context.onmousemove = function(e){
+        this.context.onmousemove = function (e) {
             Controller.mouseMove(e);
-        }
+        };
 
-        this.context.onmousewheel = function(e){
+        this.context.onmousewheel = function (e) {
             Controller.mouseWheel(e);
-        }
+        };
 
         this.context.captureMouse(true);
-	    this.context.captureKeys();
+        this.context.captureKeys();
 
         //
     },
 
-    start: function(){
+    start: function () {
         this.context.animate();
     },
 
@@ -112,7 +112,7 @@ var View = {
         return anim;
     },
 
-    addNode: function(obj){
+    addNode: function (obj) {
         this.scene.root.addChild(obj.sceneNode);
     },
 };

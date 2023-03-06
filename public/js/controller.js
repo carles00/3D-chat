@@ -1,5 +1,5 @@
 let Controller = {
-    update: function(dt){
+    update: function (dt) {
         View.scene.update(dt);
 
         let t = getTime();
@@ -8,14 +8,14 @@ let Controller = {
         let myUser = World.usersByName[World.myUser];
         let room = World.roomsByName[World.currentRoom];
 
-        myUser.setAnimation = 'idle';
+        myUser.setAnimation = "idle";
 
         if (gl.keys["UP"]) {
             myUser.parentNode.moveLocal([0, 0, 1]);
-            myUser.setAnimation = 'walking'
+            myUser.setAnimation = "walking";
         } else if (gl.keys["DOWN"]) {
             myUser.parentNode.moveLocal([0, 0, -1]);
-            myUser.setAnimation = 'walking'
+            myUser.setAnimation = "walking";
             timeFactor = -1;
         }
         if (gl.keys["LEFT"]) {
@@ -24,8 +24,8 @@ let Controller = {
             myUser.parentNode.rotate(-90 * DEG2RAD * dt, [0, 1, 0]);
         }
 
-        if(gl.keys["D"]){
-            myUser.setAnimation = 'dance';
+        if (gl.keys["D"]) {
+            myUser.setAnimation = "dance";
         }
 
         let pos = myUser.parentNode.position;
@@ -33,10 +33,20 @@ let Controller = {
         myUser.parentNode.position = nearestPos;
 
         myUser.currentAnimation.assignTime(t * 0.001 * timeFactor);
-        myUser.userCharacter.skeleton.copyFrom(myUser.currentAnimation.skeleton);
+        myUser.userCharacter.skeleton.copyFrom(
+            myUser.currentAnimation.skeleton
+        );
+        /*
+        room.users.forEach(otherUserName => {
+            let otherUser = World.usersByName[otherUserName];
+            otherUser.currentAnimation.assignTime(t * 0.001 * timeFactor);
+            otherUser.userCharacter.skeleton.copyFrom(myUser.currentAnimation.skeleton);
+            
+        });
+        */
     },
 
-    mouseClick: function(e){
+    mouseClick: function (e) {
         if (e.click_time < 200) {
             //fast click
             //compute collision with scene
@@ -46,7 +56,7 @@ let Controller = {
         }
     },
 
-    mouseMove: function(e){
+    mouseMove: function (e) {
         if (e.dragging) {
             //orbit camera around
             //camera.orbit( e.deltax * -0.01, RD.UP );
@@ -56,7 +66,7 @@ let Controller = {
         }
     },
 
-    mouseWheel: function(e){
+    mouseWheel: function (e) {
         View.camera.moveLocal([0, 0, e.wheel < 0 ? 10 : -10]);
-    }
-}
+    },
+};
