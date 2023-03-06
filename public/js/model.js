@@ -85,6 +85,10 @@ class User {
         this.animation = this.animations[anim];
     }
 
+    set position(pos){
+        this.parentNode.position = new Float32Array(pos);
+    }
+
     addAnimation(animation) {
         this.loadAnimation(animation, `data/${this.avatar}/${animation}.skanim`);
     }

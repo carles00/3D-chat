@@ -8,7 +8,7 @@ let Controller = {
         let myUser = World.usersByName[World.myUser];
         let room = World.roomsByName[World.currentRoom];
 
-        
+        myUser.setAnimation = 'idle';
 
         if (gl.keys["UP"]) {
             myUser.parentNode.moveLocal([0, 0, 1]);
@@ -22,6 +22,10 @@ let Controller = {
             myUser.parentNode.rotate(90 * DEG2RAD * dt, [0, 1, 0]);
         } else if (gl.keys["RIGHT"]) {
             myUser.parentNode.rotate(-90 * DEG2RAD * dt, [0, 1, 0]);
+        }
+
+        if(gl.keys["D"]){
+            myUser.setAnimation = 'dance';
         }
 
         let pos = myUser.parentNode.position;

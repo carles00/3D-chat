@@ -40,12 +40,12 @@ var View = {
             let myUserPos = myUser.sceneNode.localToGlobal([0,40,0])
             
             //var campos = girl_pivot.localToGlobal([0,50,0]);
-            let camtarget = myUser.sceneNode.localToGlobal([0, 50, 70]);
+            let camtarget = myUser.sceneNode.localToGlobal([0, 40, 0]);
             let smoothtarget = vec3.lerp(
                 vec3.create(),
                 this.camera.target,
                 camtarget,
-                0.02
+                0.09
             );
 
             this.camera.perspective(
@@ -54,7 +54,7 @@ var View = {
                 0.1,
                 1000
             );
-            this.camera.lookAt(this.camera.position, myUserPos, [0, 1, 0]);
+            this.camera.lookAt(this.camera.position, smoothtarget, [0, 1, 0]);
 
             //clear
             this.renderer.clear(this.bgColor);

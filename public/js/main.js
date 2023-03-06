@@ -5,7 +5,7 @@ function init(){
         height: window.innerHeight,
     });
 
-    //create user
+    //create  myUser
     let myUser = World.createUser('girl', 'girl', 0.3, [-40,0,0]);
     World.myUser = myUser.userName;
     //create room
@@ -13,11 +13,16 @@ function init(){
     room.addUser(myUser.userName);
     World.addRoom(room);
     World.currentRoom = room.roomName;
+
+    //create other user
+    let otherUser = World.createUser('other', 'girl', 0.25, [-20,0,0])
+    room.addUser(otherUser.userName);
     //init
     View.init(context);
 
     //add elements to the scene
     View.addNode(myUser);
+    View.addNode(otherUser);
     View.addNode(room);
 
     View.start();
