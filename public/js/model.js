@@ -33,7 +33,12 @@ let World = {
         //remove old room
         console.log(roomObj);
         let leavingRoom = this.roomsByName[this.currentRoom];
+        
         leavingRoom.deleteUser(this.myUser);
+        
+        leavingRoom.users.forEach((user)=>{
+            View.removeNode(World.usersByName[user]);
+        });
         View.removeNode(leavingRoom);
         
         if(! roomObj.walkAreas.exit.to){

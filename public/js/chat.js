@@ -51,10 +51,10 @@ const Chat = {
         this.client.sendMessage(JSON.stringify(joinMessage));
     },
 
-    changeRoom(room) {
+    changeRoom(from, to) {
         let content = {
-            from: this.roomName,
-            to: room
+            from: from,
+            to: to
         }
         let changeRoomMSG = new Message(
             "change-room",
@@ -99,6 +99,9 @@ const Chat = {
     },
 
     processMessageFromServer: function (message) {
+        if(message.type !== "recieve-update"){
+            console.log(message)
+        }
         switch (message.type) {
             case "text":
 
@@ -106,7 +109,6 @@ const Chat = {
                 this.onJoin(message.content);
                 break;
             case "create_users":
-                console.log(message);
                 this.onCreateUsers(message.content);
                 break;
             case "recieve-update":
