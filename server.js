@@ -18,13 +18,15 @@ app.use(express.static("public"));
 
 let userId = 0;
 
+serverRooms.init();
+
 wss.on("request", (req) => {
 	
 	userId++;
 
     let roomName = req.resource.split("/").pop();
     let connection = req.accept();
-
+    
     serverRooms.onUserConnected(connection, roomName, userId);
 
     connection.on("message", function (message) {
@@ -39,18 +41,15 @@ wss.on("request", (req) => {
             case "send-update":
                 serverRooms.sendUpdate(msg);
                 break;
-            case "get_room_asset":
-                // console.log(message.utf8Data)
-                // TODO: get asset name from database
-                // let assetMessage = new Message('room_asset', "assets/room1.png", userID)
-                // connection.sendUTF(JSON.stringify(assetMessage))
+            case "change-room":
+                serverRooms.changeRooms(msg);
                 break;
             default:
                 break;
         }
     });
 
-    //connection.on('close', () => serverRooms.onUserDisconnected(connection))
+    connection.on('close', () => serverRooms.onUserDisconnected(connection))
 });
 
 server.listen(port, () => {

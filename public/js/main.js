@@ -5,6 +5,8 @@ const params = new URLSearchParams(urlString)
 const USERNAME = params.get('username')
 const ROOMNAME = params.get('roomname')
 
+let canvas = null
+
 
 function init() {
     const userInput = document.getElementById('user-input');
@@ -13,24 +15,49 @@ function init() {
         width: window.innerWidth,
         height: window.innerHeight,
     });
-
-    //init chat
-    Chat.init(USERNAME, ROOMNAME, userInput);
+    
+    
 
     //create  myUser
-    let myUser = World.createUser(USERNAME, "girl", 0.3, [-40, 0, 0]);
+    let myUser = World.createUser(USERNAME, "girl", 0.1, [0, 0, 0]);
     World.myUser = myUser.userName;
     //create room
-    let room = new Room("test");
+    let walkAreas = {
+        walkArea1: {
+            pos: [-35, 0, -28],
+            x: 61,
+            y: 56
+        },
+        walkArea2: {
+            pos: [-71, 0, -66],
+            x: 38,
+            y: 94
+        },
+        drawExit:{
+            pos: [-60, 0, -66],
+            x: 16,
+            y: 10
+        },
+        exit: {
+            pos: [-60, 0, -66],
+            x: 16,
+            y: 10,
+            to: 'plaza',
+            selectorPos: [-52, 10, -68],
+            selectorScale: [16, 20, 2],
+        }
+    }
+
+
+    let room = new Room(ROOMNAME,'room',1, walkAreas);
     room.addUser(myUser.userName);
     World.addRoom(room);
     World.currentRoom = room.roomName;
 
-    /*create other user
-    let otherUser = World.createUser("other", "girl", 0.25, [-20, 0, 0]);
-    room.addUser(otherUser.userName);
-    */
-    //init
+    //init chat
+    Chat.init(USERNAME, ROOMNAME, userInput);
+
+    //init Render
     View.init(context);
 
     //add elements to the scene
@@ -38,5 +65,6 @@ function init() {
     //View.addNode(otherUser);
     View.addNode(room);
 
+    //start renderer
     View.start();
 }

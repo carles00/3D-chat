@@ -17,8 +17,16 @@ class Client {
 class Room {
     constructor(room) {
         this.name = room;
+        this.room = null;
         this.clientsConnected = [];
-        this.url = null;
+    }
+
+    set roomObj(obj){
+        this.room = obj;
+    };
+
+    get roomObj(){
+        return this.room;
     }
 
     addClient(clientID) {
@@ -46,36 +54,64 @@ const serverRooms = {
     clients: [],
 
     init: function () {
-        let newRoom = new Room("street");
-        newRoom.url = "assets/street.png";
+        let walkAreas = {
+            walkarea1: {
+                pos: [-200, 0, -200],
+                x: 200,
+                y: 200
+            },
+            exit: {
+                pos: [-60, 0, -66],
+                x: 16,
+                y: 10,
+                to: null,
+                selectorPos: [-52, 10, -68],
+                selectorScale: [16, 20, 2],
+            }
+        }
+
+        let roomObj = {
+            name: 'plaza',
+            asset: 'plaza',
+            scale: 1,
+            walkAreas: walkAreas
+        }
+
+        let newRoom = new Room('plaza');
+        newRoom.roomObj = roomObj;
         this.addRoom(newRoom);
     },
 
     onUserConnected(connection, roomName, userId) {
+        //if room does not exist on the server, create room
+        
         if (!this.roomsByName[roomName]) {
             let newRoom = new Room(roomName);
             // newRoom.url = 'assets/room1.png'
             this.addRoom(newRoom);
         }
-        let newClient = new Client(connection, userId, roomName);
-        this.addClient(newClient, roomName);
 
-        // console.log(this.roomsByName);
+        //add client to room
+        let newClient = new Client(connection, userId, roomName);
+        this.addClient(newClient);
 
         // send id to the user
         connection.sendUTF(JSON.stringify(new Message("id", userId)));
     },
 
     onUserDisconnected(connection) {
+        //retireve id from disconnected user and delete client from room and server
         let userId = null;
-        this.clients.forEach((client) => {
+        this.clients.forEach((id) => {
+            let client = this.clientsById[id];
             if (client.connection === connection) {
                 userId = client.userId;
-                let idx = this.clients.indexOf(client.connection);
+                let idx = this.clients.indexOf(userId);
                 this.clients.splice(idx, 1);
             }
         });
-        //pillar room , enviar a tothom de la room que ha marxat => borrar el user de World
+
+        //tell other connected users on the room that user disconnected
         let usersInRoom =
             this.roomsByName[this.clientsById[userId].room].clientsConnected;
 
@@ -89,12 +125,14 @@ const serverRooms = {
             user.connection.sendUTF(JSON.stringify(deleteUserMDG));
         });
 
-        if (this.clientsById[userId] && "room" in this.clientsById[userId])
+        if (this.clientsById[userId] && "room" in this.clientsById[userId]){
             this.roomsByName[this.clientsById[userId].room].removeClient(
                 userId
             );
-        // let room = this.roomsByName[ this.clientsById[userId].room ]
-        // room.removeClient(userId)
+        }
+            
+
+        //delete client from server
         delete this.clientsById[userId];
     },
 
@@ -102,11 +140,9 @@ const serverRooms = {
         this.roomsByName[room.name] = room;
     },
 
-    addClient: function (client, roomName) {
-        let room = this.roomsByName[roomName];
+    addClient: function (client) {
         this.clientsById[client.userId] = client;
-        this.clients.push(client);
-        room.addClient(client.userId);
+        this.clients.push(client.userId);
     },
 
     roomMessages: function (msg) {
@@ -124,28 +160,69 @@ const serverRooms = {
         });
     },
 
+    changeRooms: function (msg) {
+        let userId = msg.userId;
+        let content = msg.content;
+        let roomToLeave = content.from;
+        let roomToJoin = content.to;
+
+        roomToLeave = this.roomsByName[roomToLeave];
+        roomToJoin = this.roomsByName[roomToJoin];
+        //remove client from current room
+        let idx = roomToLeave.clientsConnected.indexOf(userId);
+        roomToLeave.clientsConnected.splice(idx, 1);
+
+        //update client info about room
+        let userClient = this.clientsById[userId];
+        userClient.room = roomToJoin.name;
+
+        msg.content = userClient.userObject;
+        //add client to new room
+        this.joinRoom(msg);
+        //send new room info to client
+        userClient.connection.send(
+            JSON.stringify(
+                new Message(
+                    "reload-room",
+                    roomToJoin.roomObj,
+                    ""
+                )
+            )
+        );
+    },
+
     joinRoom: async function (msg) {
-        console.log(msg);
         let userName = msg.userName;
         let userId = msg.userId;
         let content = msg.content;
         let userClient = this.clientsById[userId];
         let roomName = userClient.room;
         let room = this.roomsByName[roomName];
+        
+        if(msg.content.room){
+            room.roomObj = msg.content.room;
+        }
+        
+        room.addClient(userId);
+        if(content.user){
+            userClient.userObject = content.user;
 
-        userClient.userObject = content;
+        }
 
         room.clientsConnected.forEach((client) => {
             let clientToSend = this.clientsById[client];
             if (client !== userId) {
+                //send to other users on the room that a user has connected.
                 let othersMessage = new Message(
-                    msg.type,
+                    "join",
                     userClient.userObject,
                     userName
                 );
                 clientToSend.connection.sendUTF(JSON.stringify(othersMessage));
             } else {
+                //send users on the room to connected user
                 let usersConnected = room.getUsersConnected();
+
                 if (usersConnected.length > 1) {
                     let userMessage = new Message(
                         "create_users",
@@ -158,7 +235,6 @@ const serverRooms = {
                 }
             }
         });
-
         /*
         await redisClient.connect();
         const key = `${redisPrefix}.${userName}`;
@@ -184,20 +260,19 @@ const serverRooms = {
         let userName = msg.userName;
         let userId = msg.userId;
         let content = msg.content;
-
         let userClient = this.clientsById[userId];
         if (!userClient) return;
         let roomName = userClient.room;
         let room = this.roomsByName[roomName];
 
-        userClient.userObject = content;
+        //userClient.userObject = content;
 
         room.clientsConnected.forEach((client) => {
             let clientToSend = this.clientsById[client];
             if (client !== userId) {
                 let othersMessage = new Message(
                     "recieve-update",
-                    userClient.userObject,
+                    content,
                     userName
                 );
                 clientToSend.connection.sendUTF(JSON.stringify(othersMessage));

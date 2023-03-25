@@ -34,14 +34,9 @@ const Chat = {
         this.client = new SocketClient(url);
         this.userId = this.client.connect(roomName, userName);
         this.input = chatInput;
+
         this.client.onId = this.onId.bind(this);
-        this.client.onMessage = this.recieveMessage.bind(this);
-        this.client.onJoin = this.onJoin.bind(this);
-        this.client.onCreateUsers = this.onCreateUsers.bind(this);
-        this.client.onRecieveUserUpdate = this.onRecieveUserUpdate.bind(this);
-        this.client.onRecieveRoomAsset = this.onRecieveRoomAsset.bind(this);
-        this.client.onUserSkin = this.onUserSkin.bind(this);
-        this.client.onDeleteUser = this.onDeleteUser.bind(this);
+        this.client.onRecieveMessage = this.processMessageFromServer.bind(this);
     },
 
     onId: function (id) {
@@ -49,7 +44,7 @@ const Chat = {
         // once we have an id join the room
         let joinMessage = new Message(
             "join",
-            World.usersByName[World.myUser],
+            {user: World.usersByName[World.myUser], room: World.roomsByName[World.currentRoom]},
             this.userName,
             this.userId
         );
@@ -57,16 +52,32 @@ const Chat = {
     },
 
     changeRoom(room) {
-        this.client.disconnect();
-        this.client.connect(room);
-        this.roomName = room;
+        let content = {
+            from: this.roomName,
+            to: room
+        }
+        let changeRoomMSG = new Message(
+            "change-room",
+            content,
+            this.userName,
+            this.userId
+        );
+        this.client.sendMessage(JSON.stringify(changeRoomMSG));
     },
 
     sendUpdate() {
         if (this.userId) {
+            let myUser = World.usersByName[World.myUser];
+            let update = {
+                pos: myUser.position,
+                rot: myUser.rotation,
+                anim: myUser.animation,
+                dir: myUser.direction,
+            };
+
             let message = new Message(
                 "send-update",
-                World.my_user,
+                update,
                 this.userName,
                 this.userId
             );
@@ -87,19 +98,57 @@ const Chat = {
         this.input.value = "";
     },
 
+    processMessageFromServer: function (message) {
+        switch (message.type) {
+            case "text":
+
+            case "join":
+                this.onJoin(message.content);
+                break;
+            case "create_users":
+                console.log(message);
+                this.onCreateUsers(message.content);
+                break;
+            case "recieve-update":
+                this.onRecieveUserUpdate(message.userName, message.content);
+                break;
+            case "reload-room":
+                this.onReloadRoom(message.content);
+                break;
+            case "user_skin":
+
+            case "delete_user":
+                this.onDeleteUser(message.content);
+                break;
+            default:
+                break;
+        }
+    },
+
     onJoin: function (content) {
         World.createUser(
             content.userName,
             content.avatar,
             content.scale,
-            content.position
+            content.position,
+            World.currentRoom
         );
+
         View.addNode(World.usersByName[content.userName]);
     },
 
     onCreateUsers: function (content) {
         content.forEach((user) => {
-            console.log(user);
+            if (user.userName !== this.userName) {
+                World.createUser(
+                    user.userName,
+                    user.avatar,
+                    user.scale,
+                    user.position,
+                    World.currentRoom
+                );
+                View.addNode(World.usersByName[user.userName]);
+            }
         });
     },
 
@@ -121,6 +170,12 @@ const Chat = {
     },
 
     onDeleteUser: function (content) {
+        let userToDelete = World.usersByName[content];
         World.deleteUser(content);
+        View.removeNode(userToDelete);
     },
+
+    onReloadRoom: function(content){
+        World.loadRoom(content);
+    }
 };
