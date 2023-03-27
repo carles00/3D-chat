@@ -93,18 +93,22 @@ const Chat = {
             this.userName,
             this.userId
         );
-        World.sendMessage(messageToSend.content);
+        //World.sendMessage(messageToSend.content);
         this.client.sendMessage(JSON.stringify(messageToSend));
         this.input.value = "";
     },
 
     processMessageFromServer: function (message) {
-        if(message.type !== "recieve-update"){
+        if(DEBUG && message.type !== "recieve-update"){
             console.log(message)
         }
         switch (message.type) {
             case "text":
+                console.log(message.content);
+                break;
+            case 'private':
 
+                break;
             case "join":
                 this.onJoin(message.content);
                 break;

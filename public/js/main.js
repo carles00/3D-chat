@@ -10,17 +10,22 @@ let canvas = null
 
 function init() {
     const userInput = document.getElementById('user-input');
+    userInput.addEventListener('keyup',(e)=>{
+        if(e.key === 'Enter'){
+            Chat.sendMessage()
+        }
+    });
+
     //initialize context
     let context = GL.create({
         width: window.innerWidth,
         height: window.innerHeight,
     });
-    
-    
 
     //create  myUser
     let myUser = World.createUser(USERNAME, "girl", 0.1, [0, 0, 0]);
     World.myUser = myUser.userName;
+
     //create room
     let walkAreas = {
         walkArea1: {
@@ -38,13 +43,17 @@ function init() {
             x: 16,
             y: 10
         },
-        exit: {
-            pos: [-60, 0, -66],
-            x: 16,
-            y: 10,
-            to: 'plaza',
-            selectorPos: [-52, 10, -68],
-            selectorScale: [16, 20, 2],
+        exits: {
+            exit1: {
+                pos: [-60, 0, -66],
+                spawnPos: [-52, 0, -59],
+                x: 16,
+                y: 10,
+                to: 'exitplaza',
+                selectorPos: [-52, 10, -68],
+                selectorScale: [16, 20, 2],
+            }
+            
         }
     }
 

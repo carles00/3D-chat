@@ -60,18 +60,35 @@ const serverRooms = {
                 x: 200,
                 y: 200,
             },
-            drawExit:{
-                pos: [-100, 0, -100],
+            drawExit1:{
+                pos: [-115, 0, -15],
                 x: 16,
-                y: 10
+                y: 30
             },
-            exit: {
-                pos: [-100, 0, -100],
-                x: 16,
-                y: 10,
-                to: null,
-                selectorPos: [-92, 10, -102],
-                selectorScale: [16, 20, 2],
+            drawExit2:{
+                pos: [99, 0, -15],
+                x: 10,
+                y: 30
+            },
+            exits: {
+                exit1: {
+                    pos: [-115, 0, -15],
+                    spawnPos: [-107, 0, 0],
+                    x: 16,
+                    y: 30,
+                    to: null,
+                    selectorPos: [-120, 10, 0],
+                    selectorScale: [2, 20, 30],
+                },
+                exit2: {
+                    pos: [99, 0, -15],
+                    spawnPos: [99, 0, -15],
+                    x: 10,
+                    y: 30,
+                    to: 'exitstudio',
+                    selectorPos: [120, 10, 0],
+                    selectorScale: [2, 20, 30],
+                }
             },
         };
 
@@ -150,6 +167,7 @@ const serverRooms = {
     },
 
     roomMessages: function (msg) {
+        console.log(msg);
         let userName = msg.userName;
         let userId = msg.userId;
         let content = msg.content;
@@ -165,7 +183,6 @@ const serverRooms = {
     },
 
     changeRooms: function (msg) {
-        console.log(msg);
         let userId = msg.userId;
         let content = msg.content;
         let roomToLeave = content.from;
