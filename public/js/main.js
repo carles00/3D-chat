@@ -9,12 +9,10 @@ let canvas = null
 
 
 function init() {
+    messagingController.init();
+
     const userInput = document.getElementById('user-input');
-    userInput.addEventListener('keyup',(e)=>{
-        if(e.key === 'Enter'){
-            Chat.sendMessage()
-        }
-    });
+    
 
     //initialize context
     let context = GL.create({

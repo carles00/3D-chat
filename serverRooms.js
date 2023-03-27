@@ -128,8 +128,7 @@ const serverRooms = {
             let client = this.clientsById[id];
             if (client.connection === connection) {
                 userId = client.userId;
-                let idx = this.clients.indexOf(userId);
-                this.clients.splice(idx, 1);
+                this.removeClient(userId)
             }
         });
 
@@ -166,6 +165,11 @@ const serverRooms = {
         this.clients.push(client.userId);
     },
 
+    removeClient: function(clientID){
+        let idx = this.clients.indexOf(clientID);
+        this.clients.splice(idx, 1);
+    },
+
     roomMessages: function (msg) {
         console.log(msg);
         let userName = msg.userName;
@@ -178,6 +182,24 @@ const serverRooms = {
                 let clientToSend = this.clientsById[client];
                 let sysMessage = new Message(msg.type, content, userName);
                 clientToSend.connection.sendUTF(JSON.stringify(sysMessage));
+            }
+        });
+    },
+
+    privateMessages: function(msg){
+        console.log(msg);
+        let userName = msg.userName;
+        let userId = msg.userId;
+        let content = msg.content;
+        let text = content.text;
+        let target = content.target;
+
+        this.clients.forEach((id)=>{
+            let client = this.clientsById[id];
+            let clientUserName = client.userObject.userName;
+            if(clientUserName === target){
+                let message = new Message('private', text, userName);
+                client.connection.sendUTF(JSON.stringify(message));
             }
         });
     },
@@ -305,6 +327,22 @@ const serverRooms = {
             }
         });
     },
+
+    getUsers: function(msg){
+        let userId = msg.userId;
+        let client = serverRooms.clientsById[userId];
+
+        let userNames = [];
+        this.clients.forEach(clientId =>{
+            if(clientId !== userId){
+                userNames.push(this.clientsById[clientId].userObject.userName);
+            }
+        })
+
+        let users = new Message("receive-users",userNames,'sys');
+        client.connection.sendUTF(JSON.stringify(users));
+
+    }
 };
 
 export default serverRooms;

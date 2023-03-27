@@ -22,18 +22,16 @@ class Message {
 }
 
 const Chat = {
-    input: null,
     client: null,
     userName: null,
     roomName: null,
     userId: null,
 
-    init: function (userName, roomName, chatInput) {
+    init: function (userName, roomName) {
         this.userName = userName;
         this.roomName = roomName;
         this.client = new SocketClient(url);
         this.userId = this.client.connect(roomName, userName);
-        this.input = chatInput;
 
         this.client.onId = this.onId.bind(this);
         this.client.onRecieveMessage = this.processMessageFromServer.bind(this);
@@ -48,7 +46,10 @@ const Chat = {
             this.userName,
             this.userId
         );
+        let getUsers = new Message('get-users','',this.userName, this.userId)
+
         this.client.sendMessage(JSON.stringify(joinMessage));
+        this.client.sendMessage(JSON.stringify(getUsers));
     },
 
     changeRoom(from, to) {
@@ -85,17 +86,25 @@ const Chat = {
         }
     },
 
-    sendMessage: function () {
-        if (this.input.value === "") return;
+    sendMessage: function (text, userName=null) {
+        let type = 'text';
+        let content = text
+        if(userName){
+            type = 'private'
+            content = {
+                text: text,
+                target: userName
+            }
+        }
+        
         let messageToSend = new Message(
-            "text",
-            this.input.value,
+            type,
+            content,
             this.userName,
             this.userId
         );
         //World.sendMessage(messageToSend.content);
         this.client.sendMessage(JSON.stringify(messageToSend));
-        this.input.value = "";
     },
 
     processMessageFromServer: function (message) {
@@ -104,10 +113,9 @@ const Chat = {
         }
         switch (message.type) {
             case "text":
-                console.log(message.content);
                 break;
             case 'private':
-
+                this.onReceivePrivateMessage(message.userName, message.content);
                 break;
             case "join":
                 this.onJoin(message.content);
@@ -122,9 +130,14 @@ const Chat = {
                 this.onReloadRoom(message.content);
                 break;
             case "user_skin":
-
+                break;
             case "delete_user":
                 this.onDeleteUser(message.content);
+                break;
+            case "receive-users":
+                message.content.forEach((user) =>{
+                    messagingController.addConnectedUser(user);   
+                })
                 break;
             default:
                 break;
@@ -139,7 +152,7 @@ const Chat = {
             content.position,
             World.currentRoom
         );
-
+        messagingController.addConnectedUser(content.userName);
         View.addNode(World.usersByName[content.userName]);
     },
 
@@ -160,6 +173,10 @@ const Chat = {
 
     onRecieveUserUpdate: function (userName, content) {
         World.updateUser(userName, content);
+    },
+
+    onReceivePrivateMessage: function(userName, content){
+        messagingController.addMessageToBoard(content, userName);
     },
 
     recieveMessage: function (userName, content) {

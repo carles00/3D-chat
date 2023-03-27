@@ -172,6 +172,7 @@ class User {
         this.direction = dir;
     }
 
+
     addAnimation(animation) {
         this.loadAnimation(
             animation,

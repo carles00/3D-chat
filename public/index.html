@@ -28,6 +28,7 @@
         <script type="text/javascript" src="js/chat.js"></script>
         <script type="text/javascript" src="js/model.js"></script>
         <script type="text/javascript" src="js/controller.js"></script>
+        <script type="text/javascript" src="js/messaging.js" ></script>
         <script type="text/javascript" src="js/view.js"></script>
     </head>
     <body>
@@ -38,19 +39,15 @@
             >
             
             <div id="chat-space">
+                <div id="users-space-header">
+                    <p>Online Users</p> 
+                </div>
                 <div id="users-space">
-                    <p>Antonio</p>
-                    <p>Eustaquio</p>
-                    <p>Jose Andres</p>
-                    <p>Jose Andres</p>
-                    <p>Jose Andres</p>
-                    <p>Jose Andres</p>
-                    <p>Jose Andres</p>
-                    <p>Jose Andres</p>
+                </div>
+                <div id="message-user">
                 </div>
                 <div id="message-board">
 
-                    
                 </div>
                 <div id="input-space">
                     <input type="text" name="user" id="user-input"/>
@@ -69,7 +66,7 @@
             function closeNav() {
                 document.getElementById("mySidebar").style.width = "0";
             }
-
+            
             init();
         </script>
     </body>

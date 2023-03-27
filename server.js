@@ -35,6 +35,9 @@ wss.on("request", (req) => {
             case "text":
                 serverRooms.roomMessages(msg);
                 break;
+            case "private":
+                serverRooms.privateMessages(msg);
+                break;
             case "join":
                 serverRooms.joinRoom(msg);
                 break;
@@ -43,6 +46,9 @@ wss.on("request", (req) => {
                 break;
             case "change-room":
                 serverRooms.changeRooms(msg);
+                break;
+            case "get-users":
+                serverRooms.getUsers(msg);
                 break;
             default:
                 break;
