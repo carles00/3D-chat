@@ -176,7 +176,7 @@ const Chat = {
     },
 
     onReceivePrivateMessage: function(userName, content){
-        messagingController.addMessageToBoard(content, userName);
+        messagingController.addMessageToBoard(content, World.myUser, userName);
     },
 
     recieveMessage: function (userName, content) {
@@ -196,6 +196,7 @@ const Chat = {
         let userToDelete = World.usersByName[content];
         World.deleteUser(content);
         View.removeNode(userToDelete);
+        messagingController.removeConnectedUser(content);
     },
 
     onReloadRoom: function(content){

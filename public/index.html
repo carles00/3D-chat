@@ -28,34 +28,35 @@
         <script type="text/javascript" src="js/chat.js"></script>
         <script type="text/javascript" src="js/model.js"></script>
         <script type="text/javascript" src="js/controller.js"></script>
-        <script type="text/javascript" src="js/messaging.js" ></script>
+        <script type="text/javascript" src="js/messaging.js"></script>
         <script type="text/javascript" src="js/view.js"></script>
     </head>
     <body>
-        
         <div id="mySidebar" class="sidebar">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
                 >×</a
             >
-            
+
             <div id="chat-space">
                 <div id="users-space-header">
-                    <p>Online Users</p> 
+                    <p>Online Users</p>
                 </div>
-                <div id="users-space">
-                </div>
-                <div id="message-user">
-                </div>
-                <div id="message-board">
-
-                </div>
+                <div id="users-background"></div>
+                <div id="users-space"></div>
+                <div id="message-user"></div>
+                <div id="chat-background"></div>
+                <div id="message-board"></div>
                 <div id="input-space">
-                    <input type="text" name="user" id="user-input"/>
-                </div>
+                    <input
+                        type="text"
+                        name="user"
+                        id="user-input"
+                        placeholder="Write a message..."
+                    />
                 </div>
             </div>
-
         </div>
+
         <button class="openbtn" onclick="openNav()">></button>
 
         <script>
@@ -66,7 +67,7 @@
             function closeNav() {
                 document.getElementById("mySidebar").style.width = "0";
             }
-            
+
             init();
         </script>
     </body>

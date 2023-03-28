@@ -187,7 +187,6 @@ const serverRooms = {
     },
 
     privateMessages: function(msg){
-        console.log(msg);
         let userName = msg.userName;
         let userId = msg.userId;
         let content = msg.content;

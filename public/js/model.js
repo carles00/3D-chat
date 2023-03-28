@@ -74,7 +74,6 @@ let World = {
         room.exits.forEach((exit)=>{
             if('exit'+this.currentRoom === exit.to){
                 this.usersByName[this.myUser].position = exit.pos;
-                console.log(exit.pos)
             }
         });
     }
