@@ -4,12 +4,22 @@ Element.prototype.removeAllChilds = function () {
 };
 
 //helper to remove child of element by a given innerHtml
-Element.prototype.removeChildByInnerText = function(text){
-    for(let i = 0; i < this.children.length; i++){
-        if(this.children[i].innerHTML === text){
+Element.prototype.removeChildByInnerText = function (text) {
+    for (let i = 0; i < this.children.length; i++) {
+        if (this.children[i].innerHTML === text) {
             this.children[i].remove();
         }
     }
+};
+
+Element.prototype.childWithSameInnerText = function(text){
+    let existing = false;
+    for (let i = 0; i < this.children.length; i++) {
+        if (this.children[i].innerHTML === text) {
+            existing = true
+        }
+    }
+    return existing;
 }
 
 let messagingController = {
@@ -48,6 +58,7 @@ let messagingController = {
     },
 
     addConnectedUser: function (userName) {
+        if(this.usersSpace.childWithSameInnerText(userName)) return;
         //add names to connected list
         let newUser = document.createElement("div");
         newUser.className = "connected-user";
@@ -87,24 +98,24 @@ let messagingController = {
         this.messageBoard.removeAllChilds();
         this.messages.forEach((message) => {
             //only append messages from selected conversation
-            if (this.userSelected === message.author ||
-                                this.userSelected === message.to) {
+            if (
+                this.userSelected === message.author ||
+                this.userSelected === message.to
+            ) {
                 let messageDiv = document.createElement("div");
                 messageDiv.className =
                     message.author === this.userSelected
                         ? "message contact-message"
                         : "message user-message";
-                
-                
-                let textDiv = document.createElement('p');
-                textDiv.className = 'message-content';
+
+                let textDiv = document.createElement("p");
+                textDiv.className = "message-content";
                 textDiv.innerHTML = message.text;
-                
+
                 messageDiv.appendChild(textDiv);
                 this.messageBoard.prepend(messageDiv);
                 //auto scroll
                 this.messageBoard.scrollTop = this.messageBoard.scrollHeight;
-
             }
         });
     },

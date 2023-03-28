@@ -141,7 +141,7 @@ const serverRooms = {
             let deleteUserMSG = new Message(
                 "delete_user",
                 this.clientsById[userId].userObject.userName,
-                ""
+                "sys"
             );
             user.connection.sendUTF(JSON.stringify(deleteUserMSG));
         });
@@ -230,10 +230,11 @@ const serverRooms = {
         
         roomToLeave.clientsConnected.forEach((clientId)=>{
             let client = serverRooms.clientsById[clientId];
+            let userName = this.clientsById[userId].userObject.userName;
             let deleteUserMSG = new Message(
                 "delete_user",
-                this.clientsById[userId].userObject.userName,
-                ""
+                userName,
+                userName
             );
             client.connection.sendUTF(JSON.stringify(deleteUserMSG));
         });
@@ -250,7 +251,6 @@ const serverRooms = {
         if (msg.content.room) {
             room.roomObj = msg.content.room;
         }
-
         
         if (content.user) {
             userClient.userObject = content.user;
