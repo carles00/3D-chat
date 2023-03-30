@@ -1,0 +1,356 @@
+body {
+  background-color: #000;
+  overflow: hidden;
+}
+
+main {
+  position: relative;
+  width: 900px;
+  height: 499px;
+  background-image: url(./dj-turntable.jpg);
+  margin: 150px auto 0 auto;
+}
+
+#songloader-container {
+  width: 100%;
+  height: 150px;
+  position: fixed;
+  top: 0;
+  margin: auto;
+  overflow: hidden;
+}
+#songloader {
+  width: 600px;
+  background-color: #000;
+  height: 150px;
+  margin: auto;
+  position: relative;
+  top: 150px;
+  border-radius: 20px 20px 0 0;
+  border: 6px solid #444;
+  box-shadow: 0px 0px 5px #3faefd inset;
+  padding: 5px;
+}
+
+#left .jog,
+#left .tempo,
+#left .play,
+#left .volume,
+#right .jog,
+#right .tempo,
+#right .play,
+#right .volume,
+#left .less,
+#left .more,
+#right .less,
+#right .more,
+#left .load,
+#right .load,
+#left .sync,
+#right .sync,
+#crossfade {
+  position: absolute;
+  float: left;
+  background-repeat: no-repeat;
+}
+
+#left .tempo:hover,
+#left .volume:hover,
+#right .tempo:hover,
+#right .volume:hover,
+#left .play:hover,
+#right .play:hover,
+#left .less:hover,
+#left .more:hover,
+#right .less:hover,
+#right .more:hover,
+#left .load:hover,
+#right .load:hover,
+#left .sync:hover,
+#right .sync:hover,
+#crossfade:hover {
+  box-shadow: 0 0 15px #df6165, 0 0 15px #df6165;
+  cursor: pointer;
+}
+
+#left .jog {
+  width: 262px;
+  height: 262px;
+  background-image: url(./dj-turntable-ring.png);
+  left: 77px;
+  top: 149px;
+  animation: spin infinite linear;
+  animation-duration: 5s;
+}
+
+.running {
+  animation-play-state: running!important;
+}
+.paused {
+  animation-play-state: paused!important;
+}
+
+#left .tempo {
+  width: 48px;
+  height: 20px;
+  left: 35px;
+  top: 91px;
+  background-image: url(./dj-turntable-slider.png);
+}
+#left .volume {
+  width: 48px;
+  height: 20px;
+  left: 389px;
+  top: 278px;
+  background-image: url(./dj-turntable-slider.png);
+}
+
+.info {
+  position: absolute;
+  width: 270px;
+  height: 60px;
+  background-color: #000;
+  border-radius: 5px;
+  border: 2px solid #333;
+  box-shadow: 0 0 10px #555 inset;
+  overflow: hidden;
+}
+#left .info {
+  left: 90px;
+  top: 12px;
+}
+#right .info {
+  right: 90px;
+  top:  12px;
+}
+
+#left .sync {
+  width: 32px;
+  height: 32px;
+  left: 35px;
+  top: 187px;
+  border-radius: 0 0 10px 10px;
+}
+#right .sync {
+  width: 32px;
+  height: 32px;
+  right: 35px;
+  top: 187px;
+  border-radius: 0 0 10px 10px;
+}
+#left .play {
+  width: 46px;
+  height: 46px;
+  left: 85px;
+  top: 401px;
+  border-radius: 23px;
+}
+#left .less {
+  width: 33px;
+  height: 32px;
+  left: 146px;
+  top: 433px;
+  border-radius: 16px;
+}
+#left .more {
+  width: 33px;
+  height: 32px;
+  left: 192px;
+  top: 439px;
+  border-radius: 16px;
+}
+#left .load {
+  width: 32px;
+  height: 32px;
+  left: 372px;
+  top: 32px;
+  border-radius: 16px;
+}
+
+#right .load {
+  width: 32px;
+  height: 32px;
+  left: 495px;
+  top: 32px;
+  border-radius: 16px;
+}
+#right .less {
+  width: 33px;
+  height: 32px;
+  left: 630px;
+  top: 433px;
+  border-radius: 16px;
+}
+#right .more {
+  width: 33px;
+  height: 32px;
+  left: 675px;
+  top: 439px;
+  border-radius: 16px;
+}
+#right .jog {
+  width:262px;
+  height:262px;
+  background-image:url(./dj-turntable-ring.png);
+  left:562px;
+  top:149px;
+  animation: girar infinite linear;
+  animation-duration: 5s;
+}
+#right .tempo {
+  width:48px;
+  height:20px;
+  left:818px;
+  top:91px;
+  background-image:url(./dj-turntable-slider.png);
+}
+#right .volume {
+  width:48px;
+  height:20px;
+  left:465px;
+  top:278px;
+  background-image:url(./dj-turntable-slider.png);
+}
+#right .play {
+  width:46px;
+  height:46px;
+  left:568px;
+  top:401px;
+  border-radius:23px;
+}
+
+.info-time {
+  display: inline-block;
+  position: absolute;
+  bottom: 7px;
+  left: 0;
+  height: 20px;
+  font-family: 'Nova Square', sans-serif;
+  color: #3faefd;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 10px 10px 0 10px;
+  width: 120px;
+  font-weight: bold;
+}
+
+input[type=range] {
+  appearance: none;
+  display: inline-block;
+  position: absolute;  
+  left: 0;
+  width: 100%;
+  height: 3px;
+  bottom: 0;
+  -webkit-appearance: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000000;
+  height: 11px;
+  width: 10px;
+  border-radius: 3px;
+  background: #9a9a9a;
+  cursor: pointer;
+  margin-top: -4px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+}
+
+.info-tempo {
+  display: inline-block;
+  position: absolute;
+  bottom: 7px;
+  right: 0;
+  height: 20px;
+  font-family: 'Nova Square', sans-serif;
+  color: #3faefd;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 10px 10px 0 10px;
+  width: 100px;
+}
+.info-tempo span {
+  font-size: 8px;
+}
+
+.song {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  font-family: 'Nova Square', sans-serif;
+  color: #3faefd;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+#crossfade {
+  width: 24px;
+  height: 46px;
+  left: 57px;
+  background-image:url(./dj-turntable-slider-horiz.png);  
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#crossfade-container {
+  position: relative;
+  left: 380px;
+  top: 432px;
+  width: 138px;
+  height: 46px;
+}
+
+#log {
+  color: #fff;
+}
+
+table {
+  width: 100%;
+  font-family: 'Nova Square', sans-serif;
+  color: #3faefd;
+}
+
+th {
+  border-bottom: 1px solid #3faefd;
+}
+
+td {
+  border-bottom: 1px dotted #3faefd;
+  font-size: 14px;
+}
+td:nth-child(3),
+td:nth-child(4) {
+  text-align: right;
+}
+
+tbody tr:hover {
+  background-color: #3faefd;
+  color: #000;
+  cursor: pointer;
+}

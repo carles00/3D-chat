@@ -1,0 +1,97 @@
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+    <head>
+        <title>ECV - DJ Turntable</title>
+        <link rel='stylesheet' href='./audio.css'/>
+        <script type='text/javascript' src='./audio.js' defer></script>
+        <script type='text/javascript' src="http://code.jquery.com/jquery-1.10.2.js"></script>
+        <script type='text/javascript' src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    </head>
+
+    <body>
+        <main>
+            <section id='left'>
+                <div class='tempo-container'>
+                    <div class='tempo'></div>
+                </div>
+                <div class='load'></div>
+                <div class='sync'></div>
+                <div class='play'></div>
+                <div class='less'></div>
+                <div class='more'></div>
+                <div class='jog paused'>
+                    <div class='wave'></div>
+                </div>
+                <div class='volume-container'>
+                    <div class='volume'></div>
+                </div>
+                <div class='info'>
+                    <div class='song'></div>
+                    <div class='info-time'></div>
+                    <div class='info-tempo'>
+                        <span>TEMPO: </span>
+                        <strong>±0.00<span> %</span></strong>
+                    </div>
+                    <input type='range' min='0' max='0' value='0' step='1'>
+                </div>
+            </section>
+
+            <section id='right'>
+                <div class='tempo-container'>
+                    <div class='tempo'></div>
+                </div>
+                <div class='load'></div>
+                <div class='sync'></div>
+                <div class='play'></div>
+                <div class='less'></div>
+                <div class='more'></div>
+                <div class='jog paused'></div>
+                <div class='volume-container'>
+                    <div class='volume'></div>
+                </div>
+                <div class='info'>
+                    <div class='song'></div>
+                    <div class='info-time'></div>
+                    <div class='info-tempo'>
+                        <span>TEMPO: </span>
+                        <strong>±0.00<span> %</span></strong>
+                    </div>
+                    <input type='range' min='0' max='0' value='0' step='1'>
+                </div>
+            </section>
+        </main>
+
+        <section id='crossfade-container'>
+            <section id='crossfade'></section>
+        </section>
+
+        <div id='songloader-container'>
+            <section id='songloader'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Artist</th>
+                            <th>Duration</th>
+                            <th>BPM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick='setSong(1)'>
+                            <td>Push</td>
+                            <td>A-Trak feat. Andrew Wyatt</td>
+                            <td>06:59</td>
+                            <td>126</td>
+                        </tr>
+                        <tr onclick='setSong(2)'>
+                            <td>On A Ragga Tip</td>
+                            <td>My Digital Enemy</td>
+                            <td>04:57</td>
+                            <td>125</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+        <p id='log'></p>
+    </body>
+</html>
