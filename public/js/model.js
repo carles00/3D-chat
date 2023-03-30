@@ -3,6 +3,7 @@ let World = {
     roomsByName: {},
     myUser: null,
     currentRoom: null,
+    myRoom: null,
 
     createUser: function (userName, avatar, scale, position, room = null) {
         let newUser = new User(userName, avatar, scale, position);
@@ -65,15 +66,16 @@ let World = {
         let roomExits = Object.entries(roomObj.walkAreas.exits);
         roomExits.forEach((exit)=>{
             if(!exit[1].to){
-                exit[1].to = 'exit'+this.currentRoom;
+                exit[1].to = 'exit'+this.myRoom;
             }
         });
     },
 
     tpPlayerToEntrance: function(room){
         room.exits.forEach((exit)=>{
-            if('exit'+this.currentRoom === exit.to){
+            if('exit'+this.currentRoom === exit.to || this.currentRoom.substr(0,6) === 'studio' && exit.to.substr(4,9)==='studio'){
                 this.usersByName[this.myUser].position = exit.pos;
+                
             }
         });
     }
@@ -170,7 +172,6 @@ class User {
     set setDirection(dir) {
         this.direction = dir;
     }
-
 
     addAnimation(animation) {
         this.loadAnimation(

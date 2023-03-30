@@ -52,6 +52,7 @@ const serverRooms = {
     roomsByName: {},
     clientsById: {},
     clients: [],
+    studioId: 0,
 
     init: function () {
         let walkAreas = {
@@ -66,9 +67,9 @@ const serverRooms = {
                 y: 30
             },
             drawExit2:{
-                pos: [99, 0, -15],
+                pos: [99, 0, -13],
                 x: 10,
-                y: 30
+                y: 26
             },
             exits: {
                 exit1: {
@@ -82,7 +83,7 @@ const serverRooms = {
                 },
                 exit2: {
                     pos: [99, 0, -15],
-                    spawnPos: [99, 0, -15],
+                    spawnPos: [99, 0, 0],
                     x: 10,
                     y: 30,
                     to: 'exitstudio',
@@ -208,7 +209,11 @@ const serverRooms = {
         let content = msg.content;
         let roomToLeave = content.from;
         let roomToJoin = content.to;
-
+        //whwen a user tries to enter a studio without invitation create new studio
+        if(roomToJoin === 'studio'){
+            console.log('studio');
+            roomToJoin = this.createStudio();
+        }
         roomToLeave = this.roomsByName[roomToLeave];
         roomToJoin = this.roomsByName[roomToJoin];
         //remove client from current room
@@ -341,6 +346,53 @@ const serverRooms = {
         let users = new Message("receive-users",userNames,'sys');
         client.connection.sendUTF(JSON.stringify(users));
 
+    },
+
+    createStudio: function(){
+        this.studioId++;
+        let roomName = 'studio'+this.studioId;
+
+        let walkAreas = {
+            walkarea1: {
+                pos: [-100, 0, -100],
+                x: 200,
+                y: 200,
+            },
+            walkarea2: {
+                pos: [-47, 0, -78],
+                x: 95,
+                y: 156,
+            },
+            drawExit1:{
+                pos: [-25, 0, -88],
+                x: 24,
+                y: 16
+            },
+            exits: {
+                exit1: {
+                    pos: [-23, 0, -85],
+                    spawnPos: [-12, 0, -80],
+                    x: 30,
+                    y: 16,
+                    to: 'exitplaza',
+                    selectorPos: [-11, 10, -90],
+                    selectorScale: [30, 20, 2],
+                },
+            },
+        };
+
+        let roomObj = {
+            name: roomName,
+            asset: "studio",
+            scale: 1,
+            walkAreas: walkAreas,
+        };
+
+        let newRoom = new Room(roomName);
+        newRoom.roomObj = roomObj;
+        this.addRoom(newRoom);
+
+        return roomName;
     }
 };
 
