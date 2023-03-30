@@ -85,7 +85,14 @@ let Controller = {
                 room.exits.forEach((exit) => {
                     if (exit.walkArea.isInsideArea(myUser.parentNode.position) 
                                     && exit.to.substr(4) === node.name.substr(4)) {
-                        Chat.changeRoom(World.currentRoom, exit.to.substr(4));
+                        let exitName = exit.to.substr(4)
+                        if(exit.to.substr(4,9) === 'studio'){
+                            if(World.invitedTo){
+                                exitName = World.invitedTo;
+                            }
+                        }
+                        Chat.changeRoom(World.currentRoom, exitName);
+                        World.invitedTo = null;
                     }
                 });
             }

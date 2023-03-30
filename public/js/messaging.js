@@ -28,15 +28,18 @@ let messagingController = {
     usersSpace: null,
     messageUser: null,
     messageBoard: null,
+    messageBoardHeader: null,
     inputText: null,
 
     messages: [],
+    showingInvite: false,
 
     init: function () {
         //get dom objects
         this.usersSpace = document.getElementById("users-space");
         this.messageUser = document.getElementById("message-user");
         this.messageBoard = document.getElementById("message-board");
+        this.messageBoardHeader = document.getElementById('message-board-header');
         this.inputText = document.getElementById("user-input");
         this.inputText.addEventListener("keyup", (e) => {
             if (e.key === "Enter") {
@@ -119,4 +122,24 @@ let messagingController = {
             }
         });
     },
+
+    toggleInviteToRoom: function(){
+        
+        if(this.showingInvite){
+            document.getElementById('invite-button').remove();
+        }else{
+            let inviteButton = document.createElement('div');
+            inviteButton.id = 'invite-button';
+            inviteButton.innerHTML = 'Invite to Studio';
+            inviteButton.addEventListener('click',()=>{
+                if(this.userSelected){
+                    Chat.sendInvite(this.userSelected);
+                }
+                
+            });
+
+            this.messageBoardHeader.appendChild(inviteButton);
+        }
+        this.showingInvite = !this.showingInvite;
+    }
 };

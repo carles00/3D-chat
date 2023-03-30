@@ -141,7 +141,7 @@ body {
     position: relative;
 }
 
-#message-user{
+#message-board-header{
     grid-column: 1/1;
     grid-row: 3/4;
     color: black;

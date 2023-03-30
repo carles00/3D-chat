@@ -42,11 +42,14 @@ const Chat = {
         // once we have an id join the room
         let joinMessage = new Message(
             "join",
-            {user: World.usersByName[World.myUser], room: World.roomsByName[World.currentRoom]},
+            {
+                user: World.usersByName[World.myUser],
+                room: World.roomsByName[World.currentRoom],
+            },
             this.userName,
             this.userId
         );
-        let getUsers = new Message('get-users','',this.userName, this.userId)
+        let getUsers = new Message("get-users", "", this.userName, this.userId);
 
         this.client.sendMessage(JSON.stringify(joinMessage));
         this.client.sendMessage(JSON.stringify(getUsers));
@@ -55,8 +58,8 @@ const Chat = {
     changeRoom(from, to) {
         let content = {
             from: from,
-            to: to
-        }
+            to: to,
+        };
         let changeRoomMSG = new Message(
             "change-room",
             content,
@@ -86,17 +89,17 @@ const Chat = {
         }
     },
 
-    sendMessage: function (text, userName=null) {
-        let type = 'text';
-        let content = text
-        if(userName){
-            type = 'private'
+    sendMessage: function (text, userName = null) {
+        let type = "text";
+        let content = text;
+        if (userName) {
+            type = "private";
             content = {
                 text: text,
-                target: userName
-            }
+                target: userName,
+            };
         }
-        
+
         let messageToSend = new Message(
             type,
             content,
@@ -107,14 +110,27 @@ const Chat = {
         this.client.sendMessage(JSON.stringify(messageToSend));
     },
 
+    sendInvite: function (user) {
+        let message = new Message(
+            "send-invite",
+            {
+                room: World.currentRoom,
+                user: user
+            },
+            this.userName,
+            this.userId
+        );
+        this.client.sendMessage(JSON.stringify(message));
+    },
+
     processMessageFromServer: function (message) {
-        if(DEBUG && message.type !== "recieve-update"){
-            console.log(message)
+        if (DEBUG && message.type !== "recieve-update") {
+            console.log(message);
         }
         switch (message.type) {
             case "text":
                 break;
-            case 'private':
+            case "private":
                 this.onReceivePrivateMessage(message.userName, message.content);
                 break;
             case "join":
@@ -135,9 +151,18 @@ const Chat = {
                 this.onDeleteUser(message.content, message.userName);
                 break;
             case "receive-users":
-                message.content.forEach((user) =>{
-                    messagingController.addConnectedUser(user);   
-                })
+                message.content.forEach((user) => {
+                    messagingController.addConnectedUser(user);
+                });
+                break;
+            case "invite":
+                this.onInviteToRoom(message.content);
+                break;
+            case "connected-user":
+                this.onConnectedUser(message.content);
+                break;
+            case "disconnected-user":
+                this.onDisconnectedUser(message.content);
                 break;
             default:
                 break;
@@ -152,8 +177,15 @@ const Chat = {
             content.position,
             World.currentRoom
         );
-        messagingController.addConnectedUser(content.userName);
         View.addNode(World.usersByName[content.userName]);
+    },
+
+    onConnectedUser: function(content){
+        messagingController.addConnectedUser(content);
+    },
+
+    onDisconnectedUser: function(content){
+        messagingController.removeConnectedUser(content)
     },
 
     onCreateUsers: function (content) {
@@ -175,7 +207,7 @@ const Chat = {
         World.updateUser(userName, content);
     },
 
-    onReceivePrivateMessage: function(userName, content){
+    onReceivePrivateMessage: function (userName, content) {
         messagingController.addMessageToBoard(content, World.myUser, userName);
     },
 
@@ -196,14 +228,13 @@ const Chat = {
         let userToDelete = World.usersByName[content];
         World.deleteUser(content);
         View.removeNode(userToDelete);
-        //if the message is sent by the system that means the user disconected 
-        if(userName === "sys"){
-            messagingController.removeConnectedUser(content);
-        }
-        
     },
 
-    onReloadRoom: function(content){
+    onReloadRoom: function (content) {
         World.loadRoom(content);
-    }
+    },
+
+    onInviteToRoom: function (content) {
+        World.setStudioExitToInvite(content);
+    },
 };

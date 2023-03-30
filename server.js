@@ -50,6 +50,9 @@ wss.on("request", (req) => {
             case "get-users":
                 serverRooms.getUsers(msg);
                 break;
+            case "send-invite":
+                serverRooms.sendInvite(msg);
+                break;
             default:
                 break;
         }
