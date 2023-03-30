@@ -60,6 +60,7 @@ function init() {
     room.addUser(myUser.userName);
     World.addRoom(room);
     World.currentRoom = room.roomName;
+    World.myRoom = room.roomName;
 
     //init chat
     Chat.init(USERNAME, ROOMNAME, userInput);

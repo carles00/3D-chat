@@ -132,7 +132,7 @@ const Chat = {
             case "user_skin":
                 break;
             case "delete_user":
-                this.onDeleteUser(message.content);
+                this.onDeleteUser(message.content, message.userName);
                 break;
             case "receive-users":
                 message.content.forEach((user) =>{
@@ -176,7 +176,7 @@ const Chat = {
     },
 
     onReceivePrivateMessage: function(userName, content){
-        messagingController.addMessageToBoard(content, userName);
+        messagingController.addMessageToBoard(content, World.myUser, userName);
     },
 
     recieveMessage: function (userName, content) {
@@ -192,10 +192,15 @@ const Chat = {
         World.setUserSkin(this.userName, content);
     },
 
-    onDeleteUser: function (content) {
+    onDeleteUser: function (content, userName) {
         let userToDelete = World.usersByName[content];
         World.deleteUser(content);
         View.removeNode(userToDelete);
+        //if the message is sent by the system that means the user disconected 
+        if(userName === "sys"){
+            messagingController.removeConnectedUser(content);
+        }
+        
     },
 
     onReloadRoom: function(content){
