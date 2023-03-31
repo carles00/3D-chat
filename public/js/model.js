@@ -256,6 +256,10 @@ class Room {
             let walkAreaY = area[1].y;
             if (area[0] !== "exits") {
                 this.walkarea.addRect(walkAreaPos, walkAreaX, walkAreaY);
+            } 
+            else if (area[0] === 'djTurntable') {
+                this.tableDJ = new WalkArea()
+                this.tableDJ.addRect(walkAreaPos, walkAreaX, walkAreaY)
             } else {
                 let exitsObj = Object.entries(area[1]);
                 exitsObj.forEach((exitObj) => {

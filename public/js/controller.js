@@ -50,6 +50,8 @@ let Controller = {
             myUser.parentNode.position = nearestPos;
         }
 
+        if (room.tableDJ)
+
         Chat.sendUpdate();
     },
 

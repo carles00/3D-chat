@@ -377,6 +377,11 @@ const serverRooms = {
                 x: 95,
                 y: 156,
             },
+            djTurntable: {
+                pos: [-1, 0, -1],
+                x: 1,
+                y: 1
+            },
             drawExit1:{
                 pos: [-25, 0, -88],
                 x: 24,
