@@ -76,11 +76,11 @@ app.post('/register', async (req, res) => {
     if (await redisClient.get(key) === null) {
         await redisClient.set(key, JSON.stringify(req.body))
         await redisClient.disconnect()
-        res.send('<script>alert("User registered successfully :)"); window.location.href = "/"</script>')
+        res.send('<script>alert("User registered successfully :)"); window.location.href = "/node/9025/"</script>')
     }
     else {
         await redisClient.disconnect()
-        res.send('<script>alert("User already registered :/"); window.location.href = "/register.html"</script>')
+        res.send('<script>alert("User already registered :/"); window.location.href = "/node/9025/register.html"</script>')
     }
 })
 
@@ -97,7 +97,7 @@ app.post('/login', async (req, res) => {
     // Validate user's info
     const validUser = userInfo && (req.body.username === userInfo.username) && (req.body.password === userInfo.password)
     if (validUser) res.redirect(`music-studio.html?username=${userInfo.username}&roomname=${userInfo.room}`)
-    else res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
+    else res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
 })
 
 server.listen(port, () => {
