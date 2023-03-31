@@ -54,6 +54,35 @@ body {
 .openbtn:hover {
     background-color: #444;
 }
+
+/* ------------------ Mic Button ---------------- */
+.mic-button {
+    background: #5fb5fe;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+.mic-button > i {
+    color: #333;
+}
+.mic-button:hover {
+    background: #333;
+}
+.mic-button:hover > i {
+    color: #5fb5fe;
+}
+
+
+
 /* ------------------ Messaging ---------------- */
 #chat-space{
     display: grid;

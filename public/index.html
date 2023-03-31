@@ -17,19 +17,25 @@
                 overflow: hidden;
             }
         </style>
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="css/main.css"/>
+        <link rel="stylesheet" href="css/dj.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <script type="text/javascript" src="js/main.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script type="text/javascript" src="js/extra/wbin.js"></script>
-        <script type="text/javascript" src="js/extra/walkarea.js"></script>
+        <script type="text/javascript" src="js/extra/walkArea.js"></script>
         <script type="text/javascript" src="js/client.js"></script>
         <script type="text/javascript" src="js/chat.js"></script>
         <script type="text/javascript" src="js/model.js"></script>
         <script type="text/javascript" src="js/controller.js"></script>
         <script type="text/javascript" src="js/messaging.js"></script>
         <script type="text/javascript" src="js/view.js"></script>
+        <script type="text/javascript" src="js/mic.js" defer></script>
+        <!-- <script type="text/javascript" src="js/dj.js" defer></script> -->
+        <!-- <script type='text/javascript' src="http://code.jquery.com/jquery-1.10.2.js"></script> -->
+        <!-- <script type='text/javascript' src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
     </head>
     <body>
         <div id="mySidebar" class="sidebar">
@@ -57,7 +63,97 @@
             </div>
         </div>
 
-        
+        <div class='mic-button' onclick='clickMicButton()'>
+            <i class='fa fa-microphone'></i>
+        </div>
+
+        <div class='dj-turntable' hidden>
+            <main>
+                <section id='left'>
+                    <div class='tempo-container'>
+                        <div class='tempo'></div>
+                    </div>
+                    <div class='load'></div>
+                    <div class='sync'></div>
+                    <div class='play'></div>
+                    <div class='less'></div>
+                    <div class='more'></div>
+                    <div class='jog paused'>
+                        <div class='wave'></div>
+                    </div>
+                    <div class='volume-container'>
+                        <div class='volume'></div>
+                    </div>
+                    <div class='info'>
+                        <div class='song'></div>
+                        <div class='info-time'></div>
+                        <div class='info-tempo'>
+                            <span>TEMPO: </span>
+                            <strong>±0.00<span> %</span></strong>
+                        </div>
+                        <input type='range' min='0' max='0' value='0' step='1'>
+                    </div>
+                </section>
+    
+                <section id='right'>
+                    <div class='tempo-container'>
+                        <div class='tempo'></div>
+                    </div>
+                    <div class='load'></div>
+                    <div class='sync'></div>
+                    <div class='play'></div>
+                    <div class='less'></div>
+                    <div class='more'></div>
+                    <div class='jog paused'></div>
+                    <div class='volume-container'>
+                        <div class='volume'></div>
+                    </div>
+                    <div class='info'>
+                        <div class='song'></div>
+                        <div class='info-time'></div>
+                        <div class='info-tempo'>
+                            <span>TEMPO: </span>
+                            <strong>±0.00<span> %</span></strong>
+                        </div>
+                        <input type='range' min='0' max='0' value='0' step='1'>
+                    </div>
+                </section>
+            </main>
+    
+            <section id='crossfade-container'>
+                <div id='crossfade'></div>
+            </section>
+    
+            <div id='songloader-container'>
+                <section id='songloader'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Artist</th>
+                                <th>Duration</th>
+                                <th>BPM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick='DJ_TURNTABLE.setSong(1)'>
+                                <td>Push</td>
+                                <td>A-Trak feat. Andrew Wyatt</td>
+                                <td>06:59</td>
+                                <td>126</td>
+                            </tr>
+                            <tr onclick='DJ_TURNTABLE.setSong(2)'>
+                                <td>On A Ragga Tip</td>
+                                <td>My Digital Enemy</td>
+                                <td>04:57</td>
+                                <td>125</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <p id='log'></p>
+        </div>
 
         <button class="openbtn" onclick="openNav()">></button>
 

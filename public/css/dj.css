@@ -7,7 +7,7 @@ main {
   position: relative;
   width: 900px;
   height: 499px;
-  background-image: url(./dj-turntable.jpg);
+  background-image: url(../data/dj/dj-turntable.jpg);
   margin: 150px auto 0 auto;
 }
 
@@ -76,7 +76,7 @@ main {
 #left .jog {
   width: 262px;
   height: 262px;
-  background-image: url(./dj-turntable-ring.png);
+  background-image: url(../data/dj/dj-turntable-ring.png);
   left: 77px;
   top: 149px;
   animation: spin infinite linear;
@@ -95,14 +95,14 @@ main {
   height: 20px;
   left: 35px;
   top: 91px;
-  background-image: url(./dj-turntable-slider.png);
+  background-image: url(../data/dj/dj-turntable-slider.png);
 }
 #left .volume {
   width: 48px;
   height: 20px;
   left: 389px;
   top: 278px;
-  background-image: url(./dj-turntable-slider.png);
+  background-image: url(../data/dj/dj-turntable-slider.png);
 }
 
 .info {
@@ -191,7 +191,7 @@ main {
 #right .jog {
   width:262px;
   height:262px;
-  background-image:url(./dj-turntable-ring.png);
+  background-image:url(../data/dj/dj-turntable-ring.png);
   left:562px;
   top:149px;
   animation: girar infinite linear;
@@ -202,14 +202,14 @@ main {
   height:20px;
   left:818px;
   top:91px;
-  background-image:url(./dj-turntable-slider.png);
+  background-image:url(../data/dj/dj-turntable-slider.png);
 }
 #right .volume {
   width:48px;
   height:20px;
   left:465px;
   top:278px;
-  background-image:url(./dj-turntable-slider.png);
+  background-image:url(../data/dj/dj-turntable-slider.png);
 }
 #right .play {
   width:46px;
@@ -306,7 +306,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   width: 24px;
   height: 46px;
   left: 57px;
-  background-image:url(./dj-turntable-slider-horiz.png);  
+  background-image: url(../data/dj/dj-turntable-slider-horiz.png);
 }
 
 @keyframes spin {
@@ -319,7 +319,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 
 #crossfade-container {
-  position: relative;
+  position: absolute;
   left: 380px;
   top: 432px;
   width: 138px;
