@@ -254,7 +254,7 @@ const serverRooms = {
         });
     },
 
-    joinRoom: async function (msg) {
+    joinRoom: async function (msg, redisPrefix, redisClient) {
         let userName = msg.userName;
         let userId = msg.userId;
         let content = msg.content;

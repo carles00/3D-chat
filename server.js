@@ -44,7 +44,7 @@ wss.on("request", (req) => {
                 serverRooms.privateMessages(msg);
                 break;
             case "join":
-                serverRooms.joinRoom(msg);
+                serverRooms.joinRoom(msg, redisPrefix, redisClient);
                 break;
             case "send-update":
                 serverRooms.sendUpdate(msg);
