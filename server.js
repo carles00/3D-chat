@@ -11,6 +11,11 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ httpServer: server });
 const port = 9025;
+const redisPrefix = 'ECDWYC3D'
+const redisClient = redis.createClient({
+    host: '127.0.0.1',
+    port: '6379'
+})
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -60,6 +65,40 @@ wss.on("request", (req) => {
 
     connection.on('close', () => serverRooms.onUserDisconnected(connection))
 });
+
+app.post('/register', async (req, res) => {
+    // Sanitize username (delete '.')
+    req.body.username = req.body.username.replace(/\./g, '')
+    // Open connection to DB
+    await redisClient.connect()
+    // Check if requested user is already registered
+    const key = `${redisPrefix}.${req.body.username}`
+    if (await redisClient.get(key) === null) {
+        await redisClient.set(key, JSON.stringify(req.body))
+        await redisClient.disconnect()
+        res.send('<script>alert("User registered successfully :)"); window.location.href = "/"</script>')
+    }
+    else {
+        await redisClient.disconnect()
+        res.send('<script>alert("User already registered :/"); window.location.href = "/register.html"</script>')
+    }
+})
+
+app.post('/login', async (req, res) => {
+    // Sanitize username (delete '.')
+    req.body.username = req.body.username.replace(/\./g, '')
+    // Open connection to DB
+    await redisClient.connect()
+    // Get user's info
+    const key = `${redisPrefix}.${req.body.username}`
+    const userInfo = JSON.parse(await redisClient.get(key))
+    // Close connection to DB
+    await redisClient.disconnect()
+    // Validate user's info
+    const validUser = userInfo && (req.body.username === userInfo.username) && (req.body.password === userInfo.password)
+    if (validUser) res.redirect(`music-studio.html?username=${userInfo.username}&roomname=${userInfo.room}`)
+    else res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
+})
 
 server.listen(port, () => {
     console.log("Server Listening on port 9025");
