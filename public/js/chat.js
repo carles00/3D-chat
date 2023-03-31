@@ -146,6 +146,7 @@ const Chat = {
                 this.onReloadRoom(message.content);
                 break;
             case "user_skin":
+                this.onUserSkin(message.content)
                 break;
             case "delete_user":
                 this.onDeleteUser(message.content, message.userName);

@@ -7,7 +7,7 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <!-- Title -->
-  <title>Music Studio - Login</title>
+  <title>Music Studio - Register</title>
   <!-- Favicon -->
   <link rel='icon' type='image/vnd.microsoft.icon' href='data/favicon.ico'>
   <!-- CSS -->
@@ -18,17 +18,17 @@
   <div class='login'>
     <div class='login-content'>
       <img class='login-bg' src='data/login-bg.jpg' alt='Login Background'>
-      <form action='/login' method='post' class='login-form'>
-        <!-- Login title -->
+      <form action='/register' method='post' class='login-form'>
+        <!-- Register title -->
         <div>
           <h1 class='login-title'>
             <span>Welcome</span> Back
           </h1>
           <p class='login-description'>
-            Welcome! Please login to continue.
+            Welcome! Please register to continue.
           </p>
         </div>
-        <!-- Login inputs -->
+        <!-- Register inputs -->
         <div>
           <div class='login-inputs'>
             <div>
@@ -39,13 +39,20 @@
               <label class='login-label'>Password</label>
               <input class='login-input' name='password' type='password' placeholder='Enter your password' required>
             </div>
+            <div>
+              <label class='login-label'>Skin</label>
+              <select name='skin' class='login-input' required>
+                <option value='woman'>Woman</option>
+                <option value='man'>Man</option>
+              </select>
+            </div>
           </div>
         </div>
-        <!-- Login button -->
+        <!-- Register button -->
         <div>
-          <button class='login-button'>Log In</button>
+          <button class='login-button'>Register</button>
         </div>
-        <a href='register.html'>Register Now</a>
+        <a href='/'>Log In</a>
       </form>
     </div>
   </div>

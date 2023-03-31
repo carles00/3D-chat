@@ -304,25 +304,18 @@ const serverRooms = {
             }
         });
 
-        /*
         await redisClient.connect();
         const key = `${redisPrefix}.${userName}`;
         const userInfo = JSON.parse(await redisClient.get(key));
         await redisClient.disconnect();
-        const roomSkin = userInfo.room.toLowerCase().replace(/\s/g, "");
         const avatarSkin = userInfo.skin.toLowerCase().replace(/\s/g, "");
-
-        if (!room.url) room.url = `assets/${roomSkin}.png`;
-        let roomAssetMSG = new Message("room_asset", room.url, userName);
-        userClient.connection.sendUTF(JSON.stringify(roomAssetMSG));
 
         let avatarAssetMSG = new Message(
             "user_skin",
-            `assets/${avatarSkin}.png`,
+            `${avatarSkin}`,
             userName
         );
         userClient.connection.sendUTF(JSON.stringify(avatarAssetMSG));
-        */
     },
 
     sendUpdate: function (msg) {
