@@ -2,8 +2,26 @@ const urlString = window.location.search
 
 const params = new URLSearchParams(urlString)
 
+// URL Parameters
 const USERNAME = params.get('username')
 const ROOMNAME = params.get('roomname')
+const SKIN = params.get('skin')
+// TODO: check if they match the values in the DDBB
+fetch(`${window.location.origin}/check_user`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        username: USERNAME,
+        roomname: ROOMNAME,
+        skin: SKIN
+    })
+})
+.then(res => {
+    if (res.status === 404) window.location.replace(`${window.location.origin}/`)
+    else console.log(res.status)
+})
+.catch(err => console.warn(err))
+
 
 let canvas = null
 
@@ -21,7 +39,7 @@ function init() {
     });
 
     //create  myUser
-    let myUser = World.createUser(USERNAME, "woman", 0.1, [0, 0, 0]);
+    let myUser = World.createUser(USERNAME, SKIN, 0.1, [0, 0, 0]);
     World.myUser = myUser.userName;
 
     //create room

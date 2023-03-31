@@ -25,6 +25,7 @@ let userId = 0;
 
 serverRooms.init();
 
+// WEBSOCKET
 wss.on("request", (req) => {
 	
 	userId++;
@@ -44,7 +45,7 @@ wss.on("request", (req) => {
                 serverRooms.privateMessages(msg);
                 break;
             case "join":
-                serverRooms.joinRoom(msg, redisPrefix, redisClient);
+                serverRooms.joinRoom(msg);
                 break;
             case "send-update":
                 serverRooms.sendUpdate(msg);
@@ -66,6 +67,7 @@ wss.on("request", (req) => {
     connection.on('close', () => serverRooms.onUserDisconnected(connection))
 });
 
+// REGISTER
 app.post('/register', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
@@ -76,14 +78,15 @@ app.post('/register', async (req, res) => {
     if (await redisClient.get(key) === null) {
         await redisClient.set(key, JSON.stringify(req.body))
         await redisClient.disconnect()
-        res.send('<script>alert("User registered successfully :)"); window.location.href = "/node/9025/"</script>')
+        res.send('<script>alert("User registered successfully :)"); window.location.href = "/"</script>')
     }
     else {
         await redisClient.disconnect()
-        res.send('<script>alert("User already registered :/"); window.location.href = "/node/9025/register.html"</script>')
+        res.send('<script>alert("User already registered :/"); window.location.href = "/register.html"</script>')
     }
 })
 
+// LOGIN
 app.post('/login', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
@@ -94,10 +97,40 @@ app.post('/login', async (req, res) => {
     const userInfo = JSON.parse(await redisClient.get(key))
     // Close connection to DB
     await redisClient.disconnect()
+    // If could not retrieve user's info...
+    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
+
     // Validate user's info
-    const validUser = userInfo && (req.body.username === userInfo.username) && (req.body.password === userInfo.password)
-    if (validUser) res.redirect(`music-studio.html?username=${userInfo.username}&roomname=${userInfo.room}`)
-    else res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
+    let conditionsMet = 0
+    if (req.body.username === userInfo.username) conditionsMet++
+    if (req.body.password === userInfo.password) conditionsMet++
+
+    if (conditionsMet < 2) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
+    else res.redirect(`music-studio.html?username=${userInfo.username}&roomname=${userInfo.username}_room&skin=${userInfo.skin}`)
+})
+
+// VALIDATE USER
+app.post('/check_user', async (req, res) => {
+    // Sanitize username (delete '.')
+    req.body.username = req.body.username.replace(/\./g, '')
+    // Open connection to DB
+    await redisClient.connect()
+    // Get user's info
+    const key = `${redisPrefix}.${req.body.username}`
+    const userInfo = JSON.parse(await redisClient.get(key))
+    // Close connection to DB
+    await redisClient.disconnect()
+    // If could not retrieve user's info...
+    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
+
+    // Validate user's info
+    let conditionsMet = 0
+    if (req.body.username === userInfo.username) conditionsMet++
+    if (req.body.roomname === `${userInfo.username}_room`) conditionsMet++
+    if (req.body.skin === userInfo.skin) conditionsMet++
+    
+    if (conditionsMet < 3) res.sendStatus(404)
+    else res.sendStatus(200)
 })
 
 server.listen(port, () => {

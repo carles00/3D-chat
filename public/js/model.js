@@ -89,6 +89,11 @@ let World = {
 
     setStudioExitToInvite: function(room){
         this.invitedTo = room;
+    },
+
+    setUserSkin: (username, skin) => {
+        if (username === World.myUser && skin === World.usersByName[username].avatar) return
+        else window.location.replace(`${window.location.origin}/`)
     }
 };
 

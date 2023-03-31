@@ -1,3 +1,5 @@
+import redis from "redis";
+
 class Message {
     constructor(type, content, userName) {
         this.type = type;
@@ -254,7 +256,7 @@ const serverRooms = {
         });
     },
 
-    joinRoom: async function (msg, redisPrefix, redisClient) {
+    joinRoom: async function (msg) {
         let userName = msg.userName;
         let userId = msg.userId;
         let content = msg.content;
@@ -304,10 +306,17 @@ const serverRooms = {
             }
         });
 
+        // REDIS BBDD when LOGIN
+        const redisPrefix = 'ECDWYC3D'
+        const redisClient = redis.createClient({
+            host: '127.0.0.1',
+            port: '6379'
+        })
         await redisClient.connect();
         const key = `${redisPrefix}.${userName}`;
         const userInfo = JSON.parse(await redisClient.get(key));
         await redisClient.disconnect();
+        if (userInfo === null) return
         const avatarSkin = userInfo.skin.toLowerCase().replace(/\s/g, "");
 
         let avatarAssetMSG = new Message(
