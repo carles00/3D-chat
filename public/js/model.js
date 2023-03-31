@@ -4,6 +4,7 @@ let World = {
     myUser: null,
     currentRoom: null,
     myRoom: null,
+    invitedTo: null,
 
     createUser: function (userName, avatar, scale, position, room = null) {
         let newUser = new User(userName, avatar, scale, position);
@@ -58,6 +59,12 @@ let World = {
 
         this.addRoom(joiningRoom);
         this.currentRoom = joiningRoom.roomName;
+
+        //show invite button when on studio room
+        if(this.currentRoom.substr(0,6) === 'studio'){
+            messagingController.toggleInviteToRoom();
+        }
+
         View.addNode(joiningRoom);
     },
 
@@ -78,6 +85,10 @@ let World = {
                 
             }
         });
+    },
+
+    setStudioExitToInvite: function(room){
+        this.invitedTo = room;
     }
 };
 

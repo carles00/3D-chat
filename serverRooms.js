@@ -147,11 +147,21 @@ const serverRooms = {
             user.connection.sendUTF(JSON.stringify(deleteUserMSG));
         });
 
+        this.clients.forEach(clientId => {
+            if(clientId != userId){
+                let client = serverRooms.clientsById[clientId];
+                let connectionMessage = new Message('disconnected-user',this.clientsById[userId].userObject.userName,this.clientsById[userId].userObject.userName);
+                client.connection.sendUTF(JSON.stringify(connectionMessage));
+            }
+        });
+
         if (this.clientsById[userId] && "room" in this.clientsById[userId]) {
             this.roomsByName[this.clientsById[userId].room].removeClient(
                 userId
             );
         }
+
+        
 
         //delete client from server
         delete this.clientsById[userId];
@@ -211,7 +221,6 @@ const serverRooms = {
         let roomToJoin = content.to;
         //whwen a user tries to enter a studio without invitation create new studio
         if(roomToJoin === 'studio'){
-            console.log('studio');
             roomToJoin = this.createStudio();
         }
         roomToLeave = this.roomsByName[roomToLeave];
@@ -287,6 +296,14 @@ const serverRooms = {
             } 
         });
 
+        this.clients.forEach(clientId => {
+            if(clientId != userId){
+                let client = serverRooms.clientsById[clientId];
+                let connectionMessage = new Message('connected-user',userName,userName);
+                client.connection.sendUTF(JSON.stringify(connectionMessage));
+            }
+        });
+
         /*
         await redisClient.connect();
         const key = `${redisPrefix}.${userName}`;
@@ -353,11 +370,6 @@ const serverRooms = {
         let roomName = 'studio'+this.studioId;
 
         let walkAreas = {
-            walkarea1: {
-                pos: [-100, 0, -100],
-                x: 200,
-                y: 200,
-            },
             walkarea2: {
                 pos: [-47, 0, -78],
                 x: 95,
@@ -393,6 +405,23 @@ const serverRooms = {
         this.addRoom(newRoom);
 
         return roomName;
+    },
+
+    sendInvite: function(msg){
+        let userName = msg.userName;
+        let content = msg.content;
+        let userToInvite = content.user;
+        let roomToInvite = content.room;
+
+        this.clients.forEach((id)=>{
+            let client = this.clientsById[id];
+            let clientUserName = client.userObject.userName;
+            if(clientUserName === userToInvite){
+                let message = new Message('invite', roomToInvite, userName);
+                client.connection.sendUTF(JSON.stringify(message));
+            }
+        });
+
     }
 };
 

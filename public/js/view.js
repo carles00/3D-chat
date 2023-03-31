@@ -40,7 +40,7 @@ var View = {
             let myUser = World.usersByName[World.myUser];
 
             let t = getTime();
-            var campos = myUser.sceneNode.localToGlobal([0,15,0]);
+            var campos = myUser.sceneNode.localToGlobal([0,16,3]);
             let camtarget = myUser.sceneNode.localToGlobal([0,20,70]);
 
             this.camera.lookAt(campos, camtarget, [0, 1, 0]);
