@@ -370,11 +370,6 @@ const serverRooms = {
         let roomName = 'studio'+this.studioId;
 
         let walkAreas = {
-            walkarea1: {
-                pos: [-100, 0, -100],
-                x: 200,
-                y: 200,
-            },
             walkarea2: {
                 pos: [-47, 0, -78],
                 x: 95,

@@ -21,7 +21,7 @@ function init() {
     });
 
     //create  myUser
-    let myUser = World.createUser(USERNAME, "girl", 0.1, [0, 0, 0]);
+    let myUser = World.createUser(USERNAME, "woman", 0.1, [0, 0, 0]);
     World.myUser = myUser.userName;
 
     //create room
