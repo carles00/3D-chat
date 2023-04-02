@@ -98,8 +98,10 @@ app.post('/login', async (req, res) => {
     // Close connection to DB
     await redisClient.disconnect()
     // If could not retrieve user's info...
-    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
-
+    if (userInfo === null) {
+        res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
+        return
+    }
     // Validate user's info
     let conditionsMet = 0
     if (req.body.username === userInfo.username) conditionsMet++
@@ -121,8 +123,10 @@ app.post('/check_user', async (req, res) => {
     // Close connection to DB
     await redisClient.disconnect()
     // If could not retrieve user's info...
-    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
-
+    if (userInfo === null) {
+        res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
+        return
+    }
     // Validate user's info
     let conditionsMet = 0
     if (req.body.username === userInfo.username) conditionsMet++
