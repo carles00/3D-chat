@@ -68,7 +68,7 @@ wss.on("request", (req) => {
 });
 
 // REGISTER
-app.post('/node/9025/register', async (req, res) => {
+app.post('/register', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
     // Open connection to DB
@@ -87,7 +87,7 @@ app.post('/node/9025/register', async (req, res) => {
 })
 
 // LOGIN
-app.post('/node/9025/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
     // Open connection to DB
@@ -110,7 +110,7 @@ app.post('/node/9025/login', async (req, res) => {
 })
 
 // VALIDATE USER
-app.post('/node/9025/check_user', async (req, res) => {
+app.post('/check_user', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
     // Open connection to DB
