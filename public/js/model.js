@@ -229,6 +229,7 @@ class Room {
     assetName = null;
     scale = null;
     walkareasObj = null;
+    tableDJ = null;
 
     roomNode = null;
     walkarea = null;

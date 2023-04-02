@@ -50,7 +50,15 @@ let Controller = {
             myUser.parentNode.position = nearestPos;
         }
 
-        if (room.tableDJ)
+        if (room.tableDJ){
+            if(room.tableDJ.isInsideArea(myUser.parentNode.position)){
+                //show turntable
+                //for example: document.getElementById("turntable").style.height = "500px";
+            }else{
+                //hide turntable
+                //for example: document.getElementById("turntable").style.height = "0px";
+            }
+        }
 
         Chat.sendUpdate();
     },
