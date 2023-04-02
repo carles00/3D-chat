@@ -17,7 +17,7 @@ fetch(`${window.location.origin}/node/9025/check_user`, {
     })
 })
 .then(res => {
-    if (res.status === 404) window.location.replace(`${window.location.origin}/`)
+    if (res.status === 404) window.location.replace(`${window.location.origin}/node/9025/`)
     else console.log(res.status)
 })
 .catch(err => console.warn(err))
