@@ -6,8 +6,8 @@ const params = new URLSearchParams(urlString)
 const USERNAME = params.get('username')
 const ROOMNAME = params.get('roomname')
 const SKIN = params.get('skin')
-// TODO: check if they match the values in the DDBB
-fetch(`${window.location.origin}/check_user`, {
+
+fetch(`${window.location.origin}/node/9025/check_user`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

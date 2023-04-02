@@ -1,4 +1,4 @@
-let DEBUG = true;
+let DEBUG = false;
 let url = DEBUG
     ? "ws://localhost:9025/ws"
     : "wss://ecv-etic.upf.edu/node/9025/ws";

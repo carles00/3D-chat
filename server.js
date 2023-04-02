@@ -68,7 +68,7 @@ wss.on("request", (req) => {
 });
 
 // REGISTER
-app.post('/register', async (req, res) => {
+app.post('/node/9025/register', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
     // Open connection to DB
@@ -78,16 +78,16 @@ app.post('/register', async (req, res) => {
     if (await redisClient.get(key) === null) {
         await redisClient.set(key, JSON.stringify(req.body))
         await redisClient.disconnect()
-        res.send('<script>alert("User registered successfully :)"); window.location.href = "/"</script>')
+        res.send('<script>alert("User registered successfully :)"); window.location.href = "/node/9025/"</script>')
     }
     else {
         await redisClient.disconnect()
-        res.send('<script>alert("User already registered :/"); window.location.href = "/register.html"</script>')
+        res.send('<script>alert("User already registered :/"); window.location.href = "/node/9025/register.html"</script>')
     }
 })
 
 // LOGIN
-app.post('/login', async (req, res) => {
+app.post('/node/9025/login', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
     // Open connection to DB
@@ -98,19 +98,19 @@ app.post('/login', async (req, res) => {
     // Close connection to DB
     await redisClient.disconnect()
     // If could not retrieve user's info...
-    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
+    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
 
     // Validate user's info
     let conditionsMet = 0
     if (req.body.username === userInfo.username) conditionsMet++
     if (req.body.password === userInfo.password) conditionsMet++
 
-    if (conditionsMet < 2) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
-    else res.redirect(`music-studio.html?username=${userInfo.username}&roomname=${userInfo.username}_room&skin=${userInfo.skin}`)
+    if (conditionsMet < 2) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
+    else res.redirect(`/node/9025/music-studio.html?username=${userInfo.username}&roomname=${userInfo.username}_room&skin=${userInfo.skin}`)
 })
 
 // VALIDATE USER
-app.post('/check_user', async (req, res) => {
+app.post('/node/9025/check_user', async (req, res) => {
     // Sanitize username (delete '.')
     req.body.username = req.body.username.replace(/\./g, '')
     // Open connection to DB
@@ -121,7 +121,7 @@ app.post('/check_user', async (req, res) => {
     // Close connection to DB
     await redisClient.disconnect()
     // If could not retrieve user's info...
-    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/"</script>')
+    if (userInfo === null) res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
 
     // Validate user's info
     let conditionsMet = 0
