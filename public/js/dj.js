@@ -3,8 +3,8 @@ const DJ_TURNTABLE = {
   jogSpeed: 5,
   DJtimeFactor: 0.1,
 
-  song1: new Audio('../data/audio/push.mp3'),
-  song2: new Audio('../data/audio/ragga.mp3'),
+  song1: new Audio('/node/9025/data/audio/push.mp3'),
+  song2: new Audio('/node/9025/data/audio/ragga.mp3'),
 
   leftSong: null,
   rightSong: null,
