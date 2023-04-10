@@ -124,7 +124,7 @@ app.post('/check_user', async (req, res) => {
     await redisClient.disconnect()
     // If could not retrieve user's info...
     if (userInfo === null) {
-        res.send('<script>alert("Credentials are incorrect :("); window.location.href = "/node/9025/"</script>')
+        res.sendStatus(404)
         return
     }
     // Validate user's info
